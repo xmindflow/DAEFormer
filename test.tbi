@@ -1,0 +1,85 @@
+cmd = /work/scratch/azad/CrossContextualAttentionSwinUnet/train.sh
+
+# start directory
+initialdir = /work/scratch/azad/CrossContextualAttentionSwinUnet/
+
+# define output, error and log file
+output = /work/scratch/azad/CrossContextualAttentionSwinUnet/logs/model_$(cluster).$(Process)_out.log
+error = /work/scratch/azad/CrossContextualAttentionSwinUnet/logs/model_$(cluster).$(Process)_err.log
+log = /work/scratch/azad/CrossContextualAttentionSwinUnet/logs/model_$(cluster).$(Process)_log.log
+
+# working environments
+getenv        = True
+environment   = "working_dir=/work/scratch/azad/CrossContextualAttentionSwinUnet/ data_dir=/work/scratch/azad/CrossContextualAttentionSwinUnet/"
+
+# prevent jobs to be terminated 
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
+######################################################################
+# Optional parameters
+######################################################################
+
+
+nice_user = True
+
+# Choose if job should run on cluster or workstation node. If unset job will run on eachy available node. Options are "cluster" or "workstations"
+# requirements = POOL =="cluster"
+#
+# request a certain machine
+# requirements = TARGET.Machine!="abatux.lfb.rwth-aachen.de"
+#
+# required GPU RAM (MB)
+
+# requirements = (GPURAM > 15000)
+
+# use only a gpu that supports half precision
+# requirements = (HALF_PREC == 1)
+
+#
+# Attention: You can only set one requirement line. Add more requirements by using && e.g.
+#
+#requirements = (GPURAM > 4000) && POOL =="cluster"
+requirements = (GPURAM > 20000) && TARGET.Machine!="abatux.lfb.rwth-aachen.de"&& TARGET.Machine!="gauss.lfb.rwth-aachen.de" && TARGET.Machine!="pc81.lfb.rwth-aachen.de" && TARGET.Machine!="pc162.lfb.rwth-aachen.de" && TARGET.Machine!="pc167.lfb.rwth-aachen.de" && TARGET.Machine!="pc40.lfb.rwth-aachen.de" && TARGET.Machine!="pc44.lfb.rwth-aachen.de" && TARGET.Machine!="pc38.lfb.rwth-aachen.de" && TARGET.Machine!="pc61.lfb.rwth-aachen.de" && TARGET.Machine!="fermi.lfb.rwth-aachen.de" && TARGET.Machine!="pc63.lfb.rwth-aachen.de"
+
+
+# required number of CPU cores
+request_cpus = 1
+
+# required number of GPUs
+request_gpus = 1
+
+# required CPU RAM
+request_memory = 20 GB
+
+# criterion after which to choose the machine
+# e.g. `rank = memory` takes machine with largest RAM
+# rank = memory
+
+# number of seconds to wait before executing job
+# deferral_time = (CurrentTime + 1)
+
+
+######################################################################
+# Further preferences
+######################################################################
+
+# sync logfile to logfiles instead of copying them after finishing
+stream_error = true
+stream_output = true
+should_transfer_files = IF_NEEDED
+
+# run with user's account
+run_as_owner = True
+load_profile = True
+
+# send email notifications (Always|Error|Complete|Never)
+notify_user   = azad@lfb.rwth-aachen.de
+notification  = Never
+
+# number of executions of this job
+# queue 1
+
+# if you want to use a range of arguments,
+# you can add them like this, one set of argumetns per line
+queue 1 args from (
+--mode swinxcit --base_lr 0.01 --max_epochs 500 --eval_interval 10 --cfg configs/swin_tiny_patch4_window7_224_lite.yaml
+)
