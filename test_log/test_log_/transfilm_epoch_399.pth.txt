@@ -1,0 +1,39 @@
+[13:28:58.713] Namespace(volume_path='/images/PublicDataset/Transunet_synaps/project_TransUNet/data/Synapse/test_vol_h5', dataset='Synapse', num_classes=9, list_dir='/home/students/yiwei/yiwei_gitlab/MISSFormer-bridge/MISSFormer/lists/lists_Synapse', output_dir='/home/students/arimond/EffFormer/results/fusion_cat_debug', max_iterations=30000, max_epochs=400, batch_size=24, img_size=224, is_savenii=False, test_save_dir='../predictions', deterministic=1, base_lr=0.05, seed=1234, opts=None, zip=False, cache_mode='part', resume=None, accumulation_steps=None, use_checkpoint=False, amp_opt_level='O1', tag=None, eval=False, throughput=False, Dataset=<class 'datasets.dataset_synapse.Synapse_dataset'>, z_spacing=1, is_pretrain=True)
+[13:28:58.713] transfilm_epoch_399.pth
+[13:30:03.103] Namespace(volume_path='/images/PublicDataset/Transunet_synaps/project_TransUNet/data/Synapse/test_vol_h5', dataset='Synapse', num_classes=9, list_dir='/home/students/arimond/EffFormer/lists/lists_Synapse/test_vol.txt', output_dir='/home/students/arimond/EffFormer/results/fusion_cat_debug', max_iterations=30000, max_epochs=400, batch_size=24, img_size=224, is_savenii=False, test_save_dir='../predictions', deterministic=1, base_lr=0.05, seed=1234, opts=None, zip=False, cache_mode='part', resume=None, accumulation_steps=None, use_checkpoint=False, amp_opt_level='O1', tag=None, eval=False, throughput=False, Dataset=<class 'datasets.dataset_synapse.Synapse_dataset'>, z_spacing=1, is_pretrain=True)
+[13:30:03.103] transfilm_epoch_399.pth
+[13:30:37.163] Namespace(volume_path='/images/PublicDataset/Transunet_synaps/project_TransUNet/data/Synapse/test_vol_h5', dataset='Synapse', num_classes=9, list_dir='/home/students/arimond/EffFormer/lists/lists_Synapse/test_vol.txt', output_dir='/home/students/arimond/EffFormer/results/fusion_cat_debug', max_iterations=30000, max_epochs=400, batch_size=24, img_size=224, is_savenii=False, test_save_dir='../predictions', deterministic=1, base_lr=0.05, seed=1234, opts=None, zip=False, cache_mode='part', resume=None, accumulation_steps=None, use_checkpoint=False, amp_opt_level='O1', tag=None, eval=False, throughput=False, Dataset=<class 'datasets.dataset_synapse.Synapse_dataset'>, z_spacing=1, is_pretrain=True)
+[13:30:37.163] transfilm_epoch_399.pth
+[13:31:24.330] Namespace(volume_path='/images/PublicDataset/Transunet_synaps/project_TransUNet/data/Synapse/test_vol_h5', dataset='Synapse', num_classes=9, list_dir='/home/students/arimond/EffFormer/lists/lists_Synapse', output_dir='/home/students/arimond/EffFormer/results/fusion_cat_debug', max_iterations=30000, max_epochs=400, batch_size=24, img_size=224, is_savenii=False, test_save_dir='../predictions', deterministic=1, base_lr=0.05, seed=1234, opts=None, zip=False, cache_mode='part', resume=None, accumulation_steps=None, use_checkpoint=False, amp_opt_level='O1', tag=None, eval=False, throughput=False, Dataset=<class 'datasets.dataset_synapse.Synapse_dataset'>, z_spacing=1, is_pretrain=True)
+[13:31:24.330] transfilm_epoch_399.pth
+[13:31:24.368] 12 test iterations per epoch
+[13:31:52.601] idx 0 case case0008 mean_dice 0.000000 mean_hd95 0.000000
+[13:31:58.519] idx 1 case case0022 mean_dice 0.000000 mean_hd95 0.000000
+[13:32:05.373] idx 2 case case0038 mean_dice 0.000000 mean_hd95 0.000000
+[13:32:17.399] idx 3 case case0036 mean_dice 0.000000 mean_hd95 0.000000
+[13:32:27.138] idx 4 case case0032 mean_dice 0.000000 mean_hd95 0.000000
+[13:32:36.839] idx 5 case case0002 mean_dice 0.000000 mean_hd95 0.000000
+[15:24:12.883] Namespace(volume_path='/images/PublicDataset/Transunet_synaps/project_TransUNet/data/Synapse/test_vol_h5', dataset='Synapse', num_classes=9, list_dir='/home/students/arimond/EffFormer/lists/lists_Synapse', output_dir='/home/students/arimond/EffFormer/results/depth_3_block_6', max_iterations=30000, max_epochs=400, batch_size=24, img_size=224, is_savenii=False, test_save_dir='../predictions', deterministic=1, base_lr=0.05, seed=1234, opts=None, zip=False, cache_mode='part', resume=None, accumulation_steps=None, use_checkpoint=False, amp_opt_level='O1', tag=None, eval=False, throughput=False, Dataset=<class 'datasets.dataset_synapse.Synapse_dataset'>, z_spacing=1, is_pretrain=True)
+[15:24:12.883] transfilm_epoch_399.pth
+[15:24:12.938] 12 test iterations per epoch
+[15:26:32.057] idx 0 case case0008 mean_dice 0.712174 mean_hd95 9.315338
+[15:27:30.121] idx 1 case case0022 mean_dice 0.903063 mean_hd95 21.451073
+[15:28:33.941] idx 2 case case0038 mean_dice 0.838503 mean_hd95 8.732411
+[15:30:44.398] idx 3 case case0036 mean_dice 0.857239 mean_hd95 10.053495
+[15:32:33.099] idx 4 case case0032 mean_dice 0.874069 mean_hd95 51.590028
+[15:34:05.743] idx 5 case case0002 mean_dice 0.884454 mean_hd95 21.513608
+[15:35:10.049] idx 6 case case0029 mean_dice 0.829973 mean_hd95 26.995200
+[15:37:26.790] idx 7 case case0003 mean_dice 0.712894 mean_hd95 100.877138
+[15:39:06.738] idx 8 case case0001 mean_dice 0.755568 mean_hd95 27.438918
+[15:40:41.371] idx 9 case case0004 mean_dice 0.817783 mean_hd95 16.118786
+[15:41:35.729] idx 10 case case0025 mean_dice 0.837140 mean_hd95 24.352557
+[15:42:28.464] idx 11 case case0035 mean_dice 0.896658 mean_hd95 3.072927
+[15:42:29.037] Mean class 1 mean_dice 0.881163 mean_hd95 7.523249
+[15:42:29.037] Mean class 2 mean_dice 0.713932 mean_hd95 28.265476
+[15:42:29.038] Mean class 3 mean_dice 0.861293 mean_hd95 50.080927
+[15:42:29.038] Mean class 4 mean_dice 0.817727 mean_hd95 40.075049
+[15:42:29.038] Mean class 5 mean_dice 0.945661 mean_hd95 24.253025
+[15:42:29.038] Mean class 6 mean_dice 0.665711 mean_hd95 9.272545
+[15:42:29.039] Mean class 7 mean_dice 0.911264 mean_hd95 40.909898
+[15:42:29.039] Mean class 8 mean_dice 0.816260 mean_hd95 13.960817
+[15:42:29.041] Testing performance in best val model: mean_dice : 0.826626 mean_hd95 : 26.792623

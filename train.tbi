@@ -1,16 +1,16 @@
-cmd = /work/scratch/azad/TransFiLM/train.sh
+cmd = /home/students/arimond/EffFormer/train.sh
 
 # start directory
-initialdir = /work/scratch/azad/TransFiLM/
+initialdir = /home/students/arimond/EffFormer
 
 # define output, error and log file
-output = /work/scratch/azad/TransFiLM/logs/model_$(cluster).$(Process)_out.log
-error = /work/scratch/azad/TransFiLM/logs/model_$(cluster).$(Process)_err.log
-log = /work/scratch/azad/TransFiLM/logs/model_$(cluster).$(Process)_log.log
+output = /work/scratch/arimond/log/swinu_$(cluster).$(Process)_out.log
+error = /work/scratch/arimond/log/swinu_$(cluster).$(Process)_err.log
+log = /work/scratch/arimond/log/swinu_$(cluster).$(Process)_log.log
 
 # working environments
 getenv        = True
-environment   = "working_dir=/work/scratch/azad/TransFiLM/ data_dir=/work/scratch/azad/TransFiLM/"
+environment   = "working_dir=/home/students/arimond/EffFormer data_dir=/home/students/arimond/EffFormer"
 
 # prevent jobs to be terminated 
 on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
@@ -72,7 +72,7 @@ run_as_owner = True
 load_profile = True
 
 # send email notifications (Always|Error|Complete|Never)
-notify_user   = azad@lfb.rwth-aachen.de
+notify_user   = arimond@lfb.rwth-aachen.de
 notification  = Never
 
 # number of executions of this job

@@ -1,4 +1,4 @@
 #!/bin/bash
-cd /work/scratch/azad/TransFiLM/
+cd /home/students/arimond/SwinUnet/
 chmod +x train.sh
-/work/scratch/azad/anaconda3/envs/pytorch_cuda11/bin/python /work/scratch/azad/TransFiLM/train.py "$@"
+/home/students/arimond/miniconda3/envs/new_cuda/bin/python /home/students/arimond/EffFormer/train.py  "$@"

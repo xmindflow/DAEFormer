@@ -1,0 +1,130 @@
+######################################################################
+# Readme
+######################################################################
+# Execute this job:
+#   - connect to `nic` via ssh: `ssh username@nic` (enter passwd)
+#   - start job: `condor_submit /path/to/this/file.tbi`
+# 
+# Monitor jobs:
+#   - see machines: `condor_status`
+#   - see queue: `condor_q`
+#   - keep monitoring queue: `watch condor_q` (quit with ctrl + c)
+# 
+# Find out more at:
+# http://www.iac.es/sieinvens/siepedia/pmwiki.php?n=HOWTOs.CondorHowTo
+######################################################################
+
+
+######################################################################
+# Necessary parameters
+######################################################################
+
+# command line arguments
+# args =
+
+# start directory
+initialdir = /home/students/arimond/EffFormer
+
+# define output, error and log file
+output = /work/scratch/arimond/log/swinu_$(cluster).$(Process)_out.log
+error = /work/scratch/arimond/log/swinu_$(cluster).$(Process)_err.log
+log = /work/scratch/arimond/log/swinu_$(cluster).$(Process)_log.log
+
+# working environments
+getenv        = True
+environment   = "working_dir=/home/students/arimond/EffFormer data_dir=/work/scratch/arimond/SwinUnet/data"
+
+
+######################################################################
+# Optional parameters
+######################################################################
+
+# If your job quits with an exit codes other then 0 (that means an error occured) it will be held. Without this it will be cancelled.
+
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
+
+
+## A nice job will note change your priority. You can use this statement when you have enough time to wait for your results
+
+nice_user = False
+
+# Choose if job should run on cluster or workstation node. If unset job will run on eachy available node. Options are "cluster" or "workstation"
+# requirements = POOL =="workstation"
+#
+# request a certain machine
+# requirements = TARGET.Machine=="abacus.lfb.rwth-aachen.de"
+#
+# required GPU RAM (MB)
+
+requirements = (GPURAM > 36000) && TARGET.Machine!="abatux.lfb.rwth-aachen.de"&& TARGET.Machine!="gauss.lfb.rwth-aachen.de" && TARGET.Machine!="pc81.lfb.rwth-aachen.de" && TARGET.Machine!="pc162.lfb.rwth-aachen.de" && TARGET.Machine!="pc167.lfb.rwth-aachen.de" && TARGET.Machine!="pc40.lfb.rwth-aachen.de" && TARGET.Machine!="pc44.lfb.rwth-aachen.de" && TARGET.Machine!="pc38.lfb.rwth-aachen.de" && TARGET.Machine!="pc61.lfb.rwth-aachen.de" && TARGET.Machine!="pc63.lfb.rwth-aachen.de"
+
+# use only a gpu that supports half precision
+# requirements = (HALF_PREC == 1)
+
+# only use machines where docker is able to run (has been checked before starting condor daemon)
+# requirements = TARGET.has_docker
+
+# You can filter CPU Flags (e.g. AVX2) to get only nodes who are able to run your code. (to check all available codec use "condor_status abacus -autoformat:th Name CPUFLAGS |grep -v slot1_ ")
+# requirements = TARGET.has_avx2
+
+
+#
+# Attention: You can only set one requirement line. Add more requirements by using && e.g.
+#
+# requirements = (GPURAM > 4000) && (GPURAM < 20000) && POOL =="workstation"
+# requirements = (GPURAM > 4000) && (GPURAM < 20000) && TARGET.Machine=="abacus.lfb.rwth-aachen.de"
+# Hint: Use (GPURAM > 5800) to match all GTX 1660 Super and GTX 1060
+# Example: (Use Workstation Pool, videocards with more then 5.8 GB but less then 16 GB VRAM and exclude all RTX 3090)
+# requirements = (GPURAM > 5800) && (GPURAM < 16000) && POOL =="workstation" && ( CUDADeviceName != "GeForce RTX 3090" ) 
+
+
+
+# required number of CPU cores
+request_cpus = 1 
+
+# required number of GPUs
+request_gpus = 1
+
+# required CPU RAM
+request_memory = 20 GB
+
+# required Disk space
+
+# request_disk = 5 GB
+
+# criterion after which to choose the machine
+# e.g. `rank = memory` takes machine with largest RAM
+# rank = memory
+
+# number of seconds to wait before executing job 
+# deferral_time = (CurrentTime + 1)
+
+
+
+######################################################################
+# Further preferences
+######################################################################
+
+# sync logfile to logfiles instead of copying them after finishing
+stream_error = true
+stream_output = true
+should_transfer_files = IF_NEEDED
+
+# run with user's account
+run_as_owner = True
+load_profile = True
+
+
+
+# number of executions of this job
+# queue 1 
+
+# if you want to use a range of arguments, 
+# you can add them like this, one set of argumetns per line
+cmd = /home/students/arimond/EffFormer/train_eff.sh
+JobBatchName = ModelScaling2
+queue 1 args from (
+    --output_dir /home/students/arimond/EffFormer/results/depth_4_block_24 --dataset Synapse --base_lr 0.05 --max_epochs 400 --eval_interval 20 --batch_size 24 --module experiment_depth.depth_4_block_24.ChannelEffFormer
+    --output_dir /home/students/arimond/EffFormer/results/depth_4_block_28 --dataset Synapse --base_lr 0.05 --max_epochs 400 --eval_interval 20 --batch_size 24 --module experiment_depth.depth_4_block_28.ChannelEffFormer
+    --output_dir /home/students/arimond/EffFormer/results/depth_4_block_32 --dataset Synapse --base_lr 0.05 --max_epochs 400 --eval_interval 20 --batch_size 24 --module experiment_depth.depth_4_block_32.ChannelEffFormer
+    )
