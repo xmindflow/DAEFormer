@@ -2,8 +2,9 @@ import torch
 import torch.nn as nn
 from einops import rearrange
 from einops.layers.torch import Rearrange
-from networks.segformer import *
 from torch.nn import functional as F
+
+from networks.segformer import *
 
 
 class Cross_Attention(nn.Module):
@@ -18,7 +19,6 @@ class Cross_Attention(nn.Module):
 
         self.reprojection = nn.Conv2d(value_channels, 2*value_channels, 1)
         self.norm = nn.LayerNorm(2*value_channels)
-    #   self.attend         = nn.Softmax(dim = -1)
 
     # x2 should be higher-level representation than x1
     def forward(self, x1, x2):
@@ -77,10 +77,6 @@ class CrossAttentionBlock(nn.Module):
         norm_2 = self.norm1(x2)
         
         attn = self.attn(norm_1, norm_2)
-        #attn = Rearrange('b (h w) d -> b h w d', h=self.H, w=self.W)(attn)
-        
-        #residual1 = Rearrange('b (h w) d -> b h w d', h=self.H, w=self.W)(x1)
-        #residual2 = Rearrange('b (h w) d -> b h w d', h=self.H, w=self.W)(x2)
         residual = torch.cat([x1, x2], dim=2)
         tx = residual + attn
         mx = tx + self.mlp(self.norm2(tx), self.H, self.W)
@@ -157,7 +153,7 @@ class ChannelAttention(nn.Module):
         Output -> [B, N, C]
     """
 
-    def __init__(self, dim, num_heads=4, qkv_bias=False, attn_drop=0, proj_drop=0):
+    def __init__(self, dim, num_heads=8, qkv_bias=False, attn_drop=0, proj_drop=0):
         super().__init__()
         self.num_heads = num_heads
         self.temperature = nn.Parameter(torch.ones(num_heads, 1, 1))
@@ -194,7 +190,7 @@ class ChannelAttention(nn.Module):
 
         return x
     
-class EfficientTransformerBlock(nn.Module):
+class DualTransformerBlock(nn.Module):
     """
         Input  -> x (Size: (b, (H*W), d)), H, W
         Output -> (b, (H*W), d)
@@ -208,7 +204,6 @@ class EfficientTransformerBlock(nn.Module):
         self.norm3 = nn.LayerNorm(in_dim)
         self.channel_attn = ChannelAttention(in_dim)
         self.norm4 = nn.LayerNorm(in_dim)
-        # add channel attention here
         if token_mlp=='mix':
             self.mlp1 = MixFFN(in_dim, int(in_dim*4))
             self.mlp2 = MixFFN(in_dim, int(in_dim*4))
@@ -220,22 +215,21 @@ class EfficientTransformerBlock(nn.Module):
             self.mlp2 = MLP_FFN(in_dim, int(in_dim*4))
 
     def forward(self, x: torch.Tensor, H, W) -> torch.Tensor:
-        # dual attention structure like it is used in the davit
+        # dual attention structure with channel attention first, then spatial attention
         norm1 = self.norm1(x)
-        norm1 = Rearrange('b (h w) d -> b d h w', h=H, w=W)(norm1)
-        
-        attn = self.attn(norm1)
-        attn = Rearrange('b d h w -> b (h w) d')(attn)
+        channel_attn = self.channel_attn(norm1)
 
-        add1 = x + attn
+        add1 = x + channel_attn
         norm2 = self.norm2(add1)
         mlp1 = self.mlp1(norm2, H, W)
 
         add2 = add1 + mlp1
         norm3 = self.norm3(add2)
-        channel_attn = self.channel_attn(norm3)
+        norm3 = Rearrange('b (h w) d -> b d h w', h=H, w=W)(norm3)
+        spatial_attn = self.attn(norm3)
+        spatial_attn = Rearrange('b d h w -> b (h w) d')(spatial_attn)
 
-        add3 = add2 + channel_attn
+        add3 = add2 + spatial_attn
         norm4 = self.norm4(add3)
         mlp2 = self.mlp2(norm4, H, W)
         
@@ -260,22 +254,22 @@ class MiT(nn.Module):
         
         # transformer encoder
         self.block1 = nn.ModuleList([ 
-            EfficientTransformerBlock(in_dim[0], key_dim[0], value_dim[0], head_count, token_mlp)
+            DualTransformerBlock(in_dim[0], key_dim[0], value_dim[0], head_count, token_mlp)
         for _ in range(layers[0])])
         self.norm1 = nn.LayerNorm(in_dim[0])
 
         self.block2 = nn.ModuleList([
-            EfficientTransformerBlock(in_dim[1], key_dim[1], value_dim[1], head_count, token_mlp)
+            DualTransformerBlock(in_dim[1], key_dim[1], value_dim[1], head_count, token_mlp)
         for _ in range(layers[1])])
         self.norm2 = nn.LayerNorm(in_dim[1])
 
         self.block3 = nn.ModuleList([
-            EfficientTransformerBlock(in_dim[2], key_dim[2], value_dim[2], head_count, token_mlp)
+            DualTransformerBlock(in_dim[2], key_dim[2], value_dim[2], head_count, token_mlp)
         for _ in range(layers[2])])
         self.norm3 = nn.LayerNorm(in_dim[2])
 
         self.block4 = nn.ModuleList([
-            EfficientTransformerBlock(in_dim[3], key_dim[3], value_dim[3], head_count, token_mlp)
+            DualTransformerBlock(in_dim[3], key_dim[3], value_dim[3], head_count, token_mlp)
         for _ in range(layers[3])])
         self.norm4 = nn.LayerNorm(in_dim[3])
         
@@ -331,12 +325,10 @@ class PatchExpand(nn.Module):
         """
         x: B, H*W, C
         """
-        # print("x_shape-----",x.shape)
         H, W = self.input_resolution
         x = self.expand(x)
         
         B, L, C = x.shape
-        # print(x.shape)
         assert L == H * W, "input feature has wrong size"
 
         x = x.view(B, H, W, C)
@@ -397,12 +389,10 @@ class MyDecoderLayer(nn.Module):
             self.concat_linear = nn.Linear(4*dims, out_dim)
             # transformer decoder
             self.layer_up = FinalPatchExpand_X4(input_resolution=input_size, dim=out_dim, dim_scale=4, norm_layer=norm_layer)
-            # self.last_layer = nn.Linear(out_dim, n_class)
             self.last_layer = nn.Conv2d(out_dim, n_class,1)
-            # self.last_layer = None
 
-        self.layer_former_1 = EfficientTransformerBlock(out_dim, key_dim, value_dim, head_count, token_mlp_mode)
-        self.layer_former_2 = EfficientTransformerBlock(out_dim, key_dim, value_dim, head_count, token_mlp_mode)
+        self.layer_former_1 = DualTransformerBlock(out_dim, key_dim, value_dim, head_count, token_mlp_mode)
+        self.layer_former_2 = DualTransformerBlock(out_dim, key_dim, value_dim, head_count, token_mlp_mode)
        
 
         def init_weights(self): 
@@ -422,11 +412,10 @@ class MyDecoderLayer(nn.Module):
         init_weights(self)
       
     def forward(self, x1, x2=None):
-        if x2 is not None:# skip connection exist
+        if x2 is not None: # skip connection exists
             b, h, w, c = x2.shape
             x2 = x2.view(b, -1, c)
             x1_expand = self.x1_linear(x1)
-            #cat_x = torch.cat([x1_expand, x2], dim=-1)
             cat_linear_x = self.concat_linear(self.cross_attn(x1_expand, x2))
             tran_layer_1 = self.layer_former_1(cat_linear_x, h, w)
             tran_layer_2 = self.layer_former_2(tran_layer_1, h, w)
@@ -436,27 +425,22 @@ class MyDecoderLayer(nn.Module):
             else:
                 out = self.layer_up(tran_layer_2)
         else:
-            # if len(x1.shape)>3:
-            #     x1 = x1.permute(0,2,3,1)
-            #     b, h, w, c = x1.shape
-            #     x1 = x1.view(b, -1, c)
             out = self.layer_up(x1)
         return out
     
     
-class ChannelEffFormer(nn.Module):
+class DAEFormer(nn.Module):
     def __init__(self, num_classes=9, head_count=1, token_mlp_mode="mix_skip"):
         super().__init__()
     
         # Encoder
         dims, key_dim, value_dim, layers = [[64, 128, 320, 512], [64, 128, 320, 512], [64, 128, 320, 512], [2, 2, 2, 2]]        
-        self.backbone = MiT(image_size=384, in_dim=dims, key_dim=key_dim, value_dim=value_dim, layers=layers,
+        self.backbone = MiT(image_size=224, in_dim=dims, key_dim=key_dim, value_dim=value_dim, layers=layers,
                             head_count=head_count, token_mlp=token_mlp_mode)
         
         # Decoder
-        d_base_feat_size = 12 #16 for 512 input size, 12 for 384, and 7 for 224, and 4 for 128
+        d_base_feat_size = 7 #16 for 512 input size, and 7 for 224
         in_out_chan = [[32, 64, 64, 64, 64],[128, 128, 128, 128, 160],[320, 320, 320, 320, 256],[512, 512, 512, 512, 512]]  # [dim, out_dim, key_dim, value_dim, x2_dim]
-        # [[32, 64, 64, 64],[144, 128, 128, 128],[288, 320, 320, 320],[512, 512, 512, 512]]
         self.decoder_3 = MyDecoderLayer((d_base_feat_size, d_base_feat_size), in_out_chan[3], head_count, 
                                         token_mlp_mode, n_class=num_classes)
         self.decoder_2 = MyDecoderLayer((d_base_feat_size*2, d_base_feat_size*2), in_out_chan[2], head_count,
@@ -483,8 +467,5 @@ class ChannelEffFormer(nn.Module):
         tmp_0 = self.decoder_0(tmp_1, output_enc[0].permute(0,2,3,1))
 
         return tmp_0
-    
-# if __name__ == "__main__":
-#     model = EffMISSFormer(num_classes=9, head_count=1, token_mlp_mode="mix_skip")
-#     print(model(torch.rand(1, 3, 224, 224)).shape)
+
     
