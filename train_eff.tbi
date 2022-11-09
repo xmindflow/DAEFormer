@@ -122,7 +122,7 @@ load_profile = True
 # if you want to use a range of arguments, 
 # you can add them like this, one set of argumetns per line
 cmd = /home/students/arimond/EffFormer/train_eff.sh
-JobBatchName = MISSFormer
+JobBatchName = MISSFormerEff
 queue 1 args from (
-    --output_dir /home/students/arimond/EffFormer/results/missformer --dataset Synapse --base_lr 0.05 --max_epochs 400 --eval_interval 10 --batch_size 24 --module missformer_nets.missformer.MISSFormer
+    --output_dir /home/students/arimond/EffFormer/results/missformer_eff --dataset Synapse --base_lr 0.05 --max_epochs 400 --eval_interval 10 --batch_size 24 --module missformer_nets.missformer_eff.MISSFormer
     )

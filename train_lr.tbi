@@ -117,7 +117,7 @@ load_profile = True
 cmd = /home/students/arimond/EffFormer/train_eff.sh
 JobBatchName = LRtrain
 queue 1 args from (
-    --output_dir /home/students/arimond/EffFormer/results/lr_04 --dataset Synapse --base_lr 0.04 --max_epochs 400 --eval_interval 10 --batch_size 24 --module networks.DualEfficientTransformerSwap.ChannelEffFormer
-    --output_dir /home/students/arimond/EffFormer/results/lr_03 --dataset Synapse --base_lr 0.03 --max_epochs 400 --eval_interval 10 --batch_size 24 --module networks.DualEfficientTransformerSwap.ChannelEffFormer
+    --output_dir /home/students/arimond/EffFormer/results/lr_04 --dataset Synapse --base_lr 0.045 --max_epochs 400 --eval_interval 10 --batch_size 24 --module networks.DualEfficientTransformerSwap.ChannelEffFormer
+#    --output_dir /home/students/arimond/EffFormer/results/lr_03 --dataset Synapse --base_lr 0.03 --max_epochs 400 --eval_interval 10 --batch_size 24 --module networks.DualEfficientTransformerSwap.ChannelEffFormer
     )
 
