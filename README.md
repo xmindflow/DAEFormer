@@ -2,7 +2,9 @@
 
 the DAEFormer is a U-Net like hierarchical pure transformer architecture.
 
+The official code for ["_DAE-Former: Dual Attention-guided Efficient Transformer for Medical Image Segmentation_"](https://arxiv.org/abs/2212.13504).
 
+![Proposed Model](./images/proposed_model.png)
 
 ## Updates
 - 29 Dec., 2022: Initial release with arXiv.
