@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from datasets.dataset_synapse import Synapse_dataset
-from experiment_depth.depth_3_block_6 import ChannelEffFormer
+from networks.DAEFormer import DAEFormer
 from trainer import trainer_synapse
 from utils import test_single_volume
 
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     args.z_spacing = dataset_config[dataset_name]["z_spacing"]
     args.is_pretrain = True
 
-    net = ChannelEffFormer(num_classes=args.num_classes).cuda(0)
+    net = DAEFormer(num_classes=args.num_classes).cuda(0)
 
     snapshot = os.path.join(args.output_dir, "best_model.pth")
     if not os.path.exists(snapshot):
