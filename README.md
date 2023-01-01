@@ -45,27 +45,26 @@ Multi organ segmentation | [Synaps](http://www.isi.uu.nl/Research/Databases/DRIV
     `pip install -r requirements.txt`
 
 3) Run the below code to train the DAEFormer on the synapse dataset.
-
-```bash
+    ```bash
     python train.py --root_path ./data/Synapse/train_npz --test_path ./data/Synapse/test_vol_h5 --batch_size 20 --eval_interval 20 --max_epochs 400 --module networks.DAEFormer.DAEFormer
-   ```
+    ```
     **--root_path**     [Train data path]
 
     **--test_path**     [Test data path]
 
     **--eval_interval** [Evaluation epoch]
 
-    **--module**    [module name, including path (can also train your own models)]
+    **--module**        [Module name, including path (can also train your own models)]
     
  4) Run the below code to test the DAEFormer on the synapse dataset.
     ```bash
     python test.py --volume_path ./data/Synapse/ --test_path ./data/Synapse/test_vol_h5 --output_dir './model_out'
     ```
-    **--volume_path** [root dir of the test data]
+    **--volume_path**   [Root dir of the test data]
     
     **--test_path**     [Test data path]
     
-    **--output_dir**    [directory of your learned weights]
+    **--output_dir**    [Directory of your learned weights]
     
 
 ### Query
