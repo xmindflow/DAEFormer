@@ -36,7 +36,37 @@ Task | Dataset |Learned weights
 Multi organ segmentation | [Synaps](http://www.isi.uu.nl/Research/Databases/DRIVE/) |[DAEFormer]()
 
 
+### Training and Testing
 
+1) Download the Synapse dataset from [here](https://drive.google.com/uc?export=download&id=18I9JHH_i0uuEDg-N6d7bfMdf7Ut6bhBi).
+
+2) Run the following code to install the Requirements.
+
+    `pip install -r requirements.txt`
+
+3) Run the below code to train the DAEFormer on the synapse dataset.
+
+```bash
+    python train.py --root_path ./data/Synapse/train_npz --test_path ./data/Synapse/test_vol_h5 --batch_size 20 --eval_interval 20 --max_epochs 400 --module networks.DAEFormer.DAEFormer
+   ```
+    **--root_path**     [Train data path]
+
+    **--test_path**     [Test data path]
+
+    **--eval_interval** [Evaluation epoch]
+
+    **--module**    [module name, including path (can also train your own models)]
+    
+ 4) Run the below code to test the DAEFormer on the synapse dataset.
+    ```bash
+    python test.py --volume_path ./data/Synapse/ --test_path ./data/Synapse/test_vol_h5 --output_dir './model_out'
+    ```
+    **--volume_path** [root dir of the test data]
+    
+    **--test_path**     [Test data path]
+    
+    **--output_dir**    [directory of your learned weights]
+    
 
 ### Query
 All implementation done by Rene Arimond. For any query please contact us for more information.
