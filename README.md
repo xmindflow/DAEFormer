@@ -66,6 +66,11 @@ Multi organ segmentation | [Synaps](https://drive.google.com/uc?export=download&
     
     **--output_dir**    [Directory of your learned weights]
     
+## Results
+Performance comparision on Synapse Multi-Organ Segmentation dataset.
+
+![synapse_results](https://user-images.githubusercontent.com/61879630/210389600-40692e5e-a425-413f-91e6-8e681f2d1532.png)
+
 
 ### Query
 All implementation done by Rene Arimond. For any query please contact us for more information.
