@@ -124,17 +124,11 @@ if __name__ == "__main__":
     dataset_config = {
         "Synapse": {
             "Dataset": Synapse_dataset,
-            "volume_path": args.volume_path,
-            "list_dir": "/home/students/arimond/EffFormer/lists/lists_Synapse",
-            "num_classes": 9,
             "z_spacing": 1,
         },
     }
     dataset_name = args.dataset
-    args.num_classes = dataset_config[dataset_name]["num_classes"]
-    args.volume_path = dataset_config[dataset_name]["volume_path"]
     args.Dataset = dataset_config[dataset_name]["Dataset"]
-    args.list_dir = dataset_config[dataset_name]["list_dir"]
     args.z_spacing = dataset_config[dataset_name]["z_spacing"]
     args.is_pretrain = True
 
