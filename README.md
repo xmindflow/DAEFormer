@@ -58,12 +58,10 @@ Multi organ segmentation | [Synapse](https://drive.google.com/uc?export=download
     
  4) Run the below code to test the DAEFormer on the synapse dataset.
     ```bash
-    python test.py --volume_path ./data/Synapse/ --test_path ./data/Synapse/test_vol_h5 --output_dir './model_out'
+    python test.py --volume_path ./data/Synapse/ --output_dir './model_out'
     ```
     **--volume_path**   [Root dir of the test data]
-    
-    **--test_path**     [Test data path]
-    
+        
     **--output_dir**    [Directory of your learned weights]
     
 ## Results
