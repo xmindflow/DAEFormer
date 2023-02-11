@@ -33,7 +33,7 @@ You can download the learned weights of the DAEFormer in the following table.
 
 Task | Dataset |Learned weights
 ------------ | -------------|----
-Multi organ segmentation | [Synapse](https://drive.google.com/uc?export=download&id=18I9JHH_i0uuEDg-N6d7bfMdf7Ut6bhBi) |[DAEFormer](https://drive.google.com/uc?export=download&id=1midkdtIq2RGMB8KHfh_k_rZWOkYRbfKX)
+Multi organ segmentation | [Synapse](https://drive.google.com/uc?export=download&id=18I9JHH_i0uuEDg-N6d7bfMdf7Ut6bhBi) | Coming Soon!
 
 
 ### Training and Testing
