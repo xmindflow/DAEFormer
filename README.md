@@ -11,11 +11,13 @@ Transformers have recently gained attention in the computer vision domain due to
 
 ## Citation
 ```
-@article{azad2022daeformer,
-  title={DAE-Former: Dual Attention-guided Efficient Transformer for Medical Image Segmentation},
-  author={Azad, Reza and Arimond, René and Aghdam, Ehsan Khodapanah and Kazerouni, Amirhosein and Merhof, Dorit},
-  journal={arXiv preprint arXiv:2212.13504},
-  year={2022}
+@inproceedings{azad2023dae,
+  title={Dae-former: Dual attention-guided efficient transformer for medical image segmentation},
+  author={Azad, Reza and Arimond, Ren{\'e} and Aghdam, Ehsan Khodapanah and Kazerouni, Amirhossein and Merhof, Dorit},
+  booktitle={International Workshop on PRedictive Intelligence In MEdicine},
+  pages={83--95},
+  year={2023},
+  organization={Springer}
 }
 ```
 
